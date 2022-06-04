@@ -12,13 +12,25 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import { AiFillFolder, AiOutlineFileText } from "react-icons/ai";
+import {
+  AiFillFolder,
+  AiOutlineFileText,
+  AiTwotoneFolderOpen,
+} from "react-icons/ai";
 
-export const Category = ({ data, token, setMemoContent }) => {
-  const [categories, setCategories] = useState();
+export const Category = ({
+  data,
+  token,
+  setMemoContent,
+  categories,
+  setCategories,
+}) => {
   const [selectedMemo, setSelectedMemo] = useState();
+  const [categoryId, setCategoryId] = useState();
+  const [expandedIndex, setExpandedIndex] = useState();
 
   const expandAccordion = async (id) => {
+    setCategories();
     await axios
       .get(`${process.env.REACT_APP_ENDPOINT}/memo`, {
         params: {
@@ -33,7 +45,6 @@ export const Category = ({ data, token, setMemoContent }) => {
         throw new Error(error);
       });
   };
-  console.log(categories);
 
   const getMemo = async (id) => {
     await axios
@@ -50,22 +61,61 @@ export const Category = ({ data, token, setMemoContent }) => {
         throw new Error(error);
       });
   };
+  console.log("category id", expandedIndex);
+  const addMemo = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_ENDPOINT}/memo`,
+        {
+          category_id: categoryId,
+          title: "New Title",
+          content: "New Content",
+        },
+        {
+          headers: {
+            "X-ACCESS-TOKEN": token,
+          },
+        }
+      )
+      .then((res) => {
+        setMemoContent(res.data);
+        setCategories([...categories, res.data]);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  };
 
   return (
     <Box w="30%">
       {data ? (
         <>
-          <Accordion allowToggle>
-            {data.map(({ id, name }, index) => {
+          <Accordion
+            allowToggle
+            onChange={(expandedIndex) => {
+              setExpandedIndex(expandedIndex);
+            }}
+          >
+            {data.map(({ id: category_id, name }, index) => {
               return (
                 <AccordionItem key={index}>
                   <h2>
                     <AccordionButton
+                      aria-expanded
                       _expanded={{ color: "blue.300" }}
-                      onClick={() => expandAccordion(id)}
+                      onClick={() => {
+                        expandAccordion(category_id);
+                        setCategoryId(category_id);
+                      }}
                     >
                       <Flex w="100%" justifyContent={"space-between"}>
-                        <Icon as={AiFillFolder} />
+                        <Icon
+                          as={
+                            category_id === categoryId
+                              ? AiTwotoneFolderOpen
+                              : AiFillFolder
+                          }
+                        />
                         <Text textAlign="center">{name}</Text>
                         <AccordionIcon />
                       </Flex>
@@ -99,7 +149,14 @@ export const Category = ({ data, token, setMemoContent }) => {
               );
             })}
           </Accordion>
-          <Button colorScheme="teal">New</Button>
+          <Button
+            colorScheme="teal"
+            id="new-memo"
+            disabled={expandedIndex === -1}
+            onClick={() => addMemo()}
+          >
+            New
+          </Button>
         </>
       ) : (
         <Text>ログインしてください</Text>

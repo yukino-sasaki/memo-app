@@ -1,6 +1,8 @@
+import { Divider, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { createContext, useState } from "react";
 import { Category } from "./components/Category";
+import { Detail } from "./components/Detail";
 import { LoginHeader } from "./components/LoginHeader";
 
 export const AccessTokenContext = createContext("");
@@ -9,23 +11,7 @@ function App() {
   const [memoData, setMemoData] = useState();
   const [token, setToken] = useState();
   const [memoContent, setMemoContent] = useState();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await axios
-  //       .get(`${process.env.REACT_APP_ENDPOINT}/category`, {
-  //         headers: {
-  //           "X-ACCESS-TOKEN": "91e98584-35cf-41ac-9a7e-01d4be32fdfa",
-  //         },
-  //       })
-  //       .then((res) => setMemoData(res.data))
-  //       .catch(() => {
-  //         throw new Error("can not fetch data");
-  //       });
-  //   };
-  //   fetchData();
-  // }, []);
-  // console.log("memo", memoData);
+  const [categories, setCategories] = useState();
 
   const uuid = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
@@ -60,12 +46,27 @@ function App() {
         throw new Error("can not fetch data");
       });
   };
-  console.log("memo detail", memoContent);
 
   return (
     <AccessTokenContext.Provider value={accessToken}>
       <LoginHeader onSubmit={onSubmit} />
-      <Category data={memoData} token={token} setMemoContent={setMemoContent} />
+      <Flex justifyContent={"space-between"}>
+        <Category
+          data={memoData}
+          token={token}
+          setMemoContent={setMemoContent}
+          categories={categories}
+          setCategories={setCategories}
+        />
+        <Divider orientation="vertical" h="full" />
+        <Detail
+          setMemoContent={setMemoContent}
+          token={token}
+          memoContent={memoContent}
+          categories={categories}
+          setCategories={setCategories}
+        />
+      </Flex>
     </AccessTokenContext.Provider>
   );
 }
