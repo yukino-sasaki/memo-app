@@ -48,12 +48,21 @@ export const Detail = ({
         },
         { headers: { "X-ACCESS-TOKEN": token } }
       )
-      .then((res) => setMemoContent(res.data))
+      .then((res) => {
+        setMemoContent(res.data);
+        const newCategories = categories.map((category) => {
+          if (category.id === id) {
+            category.title = title;
+          }
+          return category;
+        });
+        setCategories(newCategories);
+      })
       .catch((error) => {
         throw new Error(error);
       });
   };
-
+  console.log(categories);
   const deleteMemo = async () => {
     const id = getValues("id");
     await axios
@@ -73,14 +82,13 @@ export const Detail = ({
       });
   };
 
-  console.log(categories);
   return (
-    <Box w="70%">
+    <Box w="70%" px="5">
       <form onSubmit={handleSubmit(onSubmit)}>
         {memoContent && (
           <>
             <FormControl>
-              <FormLabel>Title</FormLabel>
+              <FormLabel mt="4">Title</FormLabel>
               <Input
                 variant="flushed"
                 id="title"
@@ -89,10 +97,7 @@ export const Detail = ({
                   required: "This is required",
                 })}
               />
-              {/* <FormErrorMessage>
-            {errors.name && errors.name.message}
-          </FormErrorMessage> */}
-              <FormLabel>Content</FormLabel>
+              <FormLabel mt="4">Content</FormLabel>
               <Textarea
                 variant="flushed"
                 id="content"

@@ -8,6 +8,7 @@ import {
   Button,
   Flex,
   Icon,
+  Spacer,
   Text,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -61,7 +62,7 @@ export const Category = ({
         throw new Error(error);
       });
   };
-  console.log("category id", expandedIndex);
+
   const addMemo = async () => {
     await axios
       .post(
@@ -149,14 +150,18 @@ export const Category = ({
               );
             })}
           </Accordion>
-          <Button
-            colorScheme="teal"
-            id="new-memo"
-            disabled={expandedIndex === -1}
-            onClick={() => addMemo()}
-          >
-            New
-          </Button>
+          <Flex>
+            <Spacer />
+            <Button
+              colorScheme="teal"
+              id="new-memo"
+              mt="4"
+              disabled={expandedIndex === -1}
+              onClick={() => addMemo()}
+            >
+              New
+            </Button>
+          </Flex>
         </>
       ) : (
         <Text>ログインしてください</Text>
