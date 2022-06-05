@@ -62,7 +62,7 @@ export const Detail = ({
         throw new Error(error);
       });
   };
-  console.log(categories);
+
   const deleteMemo = async () => {
     const id = getValues("id");
     await axios
@@ -76,6 +76,7 @@ export const Detail = ({
       })
       .then(() => {
         setCategories(categories.filter((category) => category.id !== id));
+        setMemoContent();
       })
       .catch((error) => {
         throw new Error(error);
@@ -84,15 +85,15 @@ export const Detail = ({
 
   return (
     <Box w="70%" px="5">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {memoContent && (
+      {memoContent ? (
+        <form onSubmit={handleSubmit(onSubmit)}>
           <>
             <FormControl>
               <FormLabel mt="4">Title</FormLabel>
               <Input
                 variant="flushed"
-                id="title"
-                placeholder="Access Token"
+                id="memo-title"
+                placeholder="title"
                 {...register("title", {
                   required: "This is required",
                 })}
@@ -100,13 +101,14 @@ export const Detail = ({
               <FormLabel mt="4">Content</FormLabel>
               <Textarea
                 variant="flushed"
-                id="content"
+                id="memo-content"
+                placeholder="content"
                 {...register("content")}
               />
             </FormControl>
             <Flex justifyContent={"space-between"}>
               <Button
-                id="save"
+                id="save-memo"
                 mt={4}
                 colorScheme="teal"
                 disabled={!memoContent}
@@ -126,8 +128,15 @@ export const Detail = ({
               </Button>
             </Flex>
           </>
-        )}
-      </form>
+        </form>
+      ) : (
+        <>
+          <FormLabel mt="4">Title</FormLabel>
+          <Input variant="flushed" id="memo-title" placeholder="title" />
+          <FormLabel mt="4">Content</FormLabel>
+          <Textarea variant="flushed" id="memo-content" placeholder="content" />
+        </>
+      )}
     </Box>
   );
 };

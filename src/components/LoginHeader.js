@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -22,35 +21,32 @@ export const LoginHeader = ({ onSubmit }) => {
 
   return (
     <Box bg="blue.400">
-      <Flex justifyContent={"space-between"}>
+      <Flex justifyContent={"space-between"} px="5">
         <Heading>Memo app</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex>
             <FormControl isInvalid={errors.name}>
               <FormLabel htmlFor="name">Access Token</FormLabel>
               <Input
-                variant="flushed"
                 minW="375px"
                 id="access_token"
-                bg="blue.400"
+                bgColor={"transparent"}
                 placeholder="Access Token"
                 {...register("access_token", {
                   required: "This is required",
                 })}
               />
-              <FormErrorMessage>
-                {errors.name && errors.name.message}
-              </FormErrorMessage>
             </FormControl>
             <Button
               id="login"
               mt={4}
+              ml="10"
               disabled={
                 !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
                   watchAccessToken
                 )
               }
-              colorScheme="blue"
+              colorScheme="teal"
               isLoading={isSubmitting}
               type="submit"
             >

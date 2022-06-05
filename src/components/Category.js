@@ -99,7 +99,7 @@ export const Category = ({
           >
             {data.map(({ id: category_id, name }, index) => {
               return (
-                <AccordionItem key={index}>
+                <AccordionItem key={index} id={`category-${category_id}`}>
                   <h2>
                     <AccordionButton
                       aria-expanded
@@ -117,7 +117,12 @@ export const Category = ({
                               : AiFillFolder
                           }
                         />
-                        <Text textAlign="center">{name}</Text>
+                        <Text
+                          textAlign="center"
+                          id={`category-${category_id}-title`}
+                        >
+                          {name}
+                        </Text>
                         <AccordionIcon />
                       </Flex>
                     </AccordionButton>
@@ -132,6 +137,7 @@ export const Category = ({
                             setSelectedMemo(id);
                             getMemo(id);
                           }}
+                          id={`memo-${id}`}
                         >
                           <Flex
                             w="100%"
