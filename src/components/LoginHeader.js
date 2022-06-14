@@ -7,6 +7,7 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export const LoginHeader = ({ onSubmit }) => {
@@ -14,8 +15,13 @@ export const LoginHeader = ({ onSubmit }) => {
     handleSubmit,
     register,
     watch,
-    formState: { errors, isSubmitting },
+    setValue,
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm();
+
+  useEffect(() => {
+    setValue("access_token", "91e98584-35cf-41ac-9a7e-01d4be32fdfa");
+  }, [setValue]);
 
   const watchAccessToken = watch("access_token");
 
@@ -26,10 +32,12 @@ export const LoginHeader = ({ onSubmit }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex>
             <FormControl isInvalid={errors.name}>
-              <FormLabel htmlFor="name">Access Token</FormLabel>
+              <FormLabel>Access Token</FormLabel>
               <Input
-                minW="375px"
                 id="access_token"
+                type="text"
+                minW="375px"
+                disabled={isSubmitting || isSubmitted}
                 bgColor={"transparent"}
                 placeholder="Access Token"
                 {...register("access_token", {
@@ -44,13 +52,15 @@ export const LoginHeader = ({ onSubmit }) => {
               disabled={
                 !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
                   watchAccessToken
-                )
+                ) ||
+                isSubmitted ||
+                isSubmitting
               }
               colorScheme="teal"
               isLoading={isSubmitting}
               type="submit"
             >
-              Login
+              LOGIN
             </Button>
           </Flex>
         </form>

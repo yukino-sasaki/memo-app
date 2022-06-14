@@ -85,14 +85,16 @@ export const Detail = ({
 
   return (
     <Box w="70%" px="5">
-      {memoContent ? (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <>
-            <FormControl>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <>
+          <FormControl>
+            <>
               <FormLabel mt="4">Title</FormLabel>
               <Input
-                variant="flushed"
+                type="text"
                 id="memo-title"
+                disabled={!memoContent}
+                variant="flushed"
                 placeholder="title"
                 {...register("title", {
                   required: "This is required",
@@ -100,43 +102,38 @@ export const Detail = ({
               />
               <FormLabel mt="4">Content</FormLabel>
               <Textarea
+                disabled={!memoContent}
                 variant="flushed"
                 id="memo-content"
                 placeholder="content"
                 {...register("content")}
               />
-            </FormControl>
-            <Flex justifyContent={"space-between"}>
-              <Button
-                id="save-memo"
-                mt={4}
-                colorScheme="teal"
-                disabled={!memoContent}
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                Save
-              </Button>
-              <Button
-                id="delete-memo"
-                mt={4}
-                colorScheme="red"
-                disabled={!memoContent}
-                onClick={() => deleteMemo()}
-              >
-                Delete
-              </Button>
-            </Flex>
-          </>
-        </form>
-      ) : (
-        <>
-          <FormLabel mt="4">Title</FormLabel>
-          <Input variant="flushed" id="memo-title" placeholder="title" />
-          <FormLabel mt="4">Content</FormLabel>
-          <Textarea variant="flushed" id="memo-content" placeholder="content" />
+            </>
+          </FormControl>
+
+          <Flex justifyContent={"space-between"}>
+            <Button
+              id="save-memo"
+              mt={4}
+              colorScheme="teal"
+              disabled={!memoContent}
+              isLoading={isSubmitting}
+              type="submit"
+            >
+              SAVE
+            </Button>
+            <Button
+              id="delete-memo"
+              mt={4}
+              colorScheme="red"
+              disabled={!memoContent}
+              onClick={() => deleteMemo()}
+            >
+              DELETE
+            </Button>
+          </Flex>
         </>
-      )}
+      </form>
     </Box>
   );
 };

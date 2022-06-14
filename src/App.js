@@ -21,8 +21,8 @@ function App() {
         },
       })
       .then((res) => setMemoData(res.data))
-      .catch(() => {
-        throw new Error("can not fetch data");
+      .catch((error) => {
+        throw new Error(error);
       });
   };
 

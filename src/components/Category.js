@@ -81,6 +81,7 @@ export const Category = ({
       .then((res) => {
         setMemoContent(res.data);
         setCategories([...categories, res.data]);
+        setSelectedMemo(res.data.id);
       })
       .catch((error) => {
         throw new Error(error);
@@ -165,7 +166,7 @@ export const Category = ({
               disabled={expandedIndex === -1}
               onClick={() => addMemo()}
             >
-              New
+              NEW
             </Button>
           </Flex>
         </>
